@@ -1,0 +1,776 @@
+version: '3'
+
+networks:
+  dm:
+    external:
+      name: dm
+
+services:
+  ca_city_safekorea_go_kr:
+    image: hyperledger/fabric-ca:1.4.4
+    networks:
+      dm:
+        aliases:
+          - ca.city.safekorea.go.kr
+    deploy:
+      restart_policy:
+        condition: on-failure
+        delay: 5s
+        # max_attempts: 3  # default : never give up
+        window: 120s
+      placement:
+        constraints: [node.hostname == blc-node01]
+    environment:
+      - FABRIC_CA_HOME=/etc/hyperledger/fabric-ca-server
+      - FABRIC_CA_SERVER_CA_NAME=ca_city_safekorea_go_kr
+      - FABRIC_CA_SERVER_CA_CERTFILE=/etc/hyperledger/fabric-ca-server-config/ca.city.safekorea.go.kr-cert.pem
+      - FABRIC_CA_SERVER_CA_KEYFILE=/etc/hyperledger/fabric-ca-server-config/10ff28955aaf1fc7aed443bda03ad33951921cf2f624b8904d724733080bc16a_sk
+      # TLS
+      - FABRIC_CA_SERVER_TLS_ENABLED=false
+      # - FABRIC_CA_SERVER_TLS_CERTFILE=/etc/hyperledger/fabric-ca-server-tls-config/tlsca.city.safekorea.go.kr-cert.pem
+      # - FABRIC_CA_SERVER_TLS_KEYFILE=/etc/hyperledger/fabric-ca-server-tls-config/8ef5280edfaef0e9f9d5ef719be88bff0e358b46429315b2629bf5bd64e0e937_sk
+    command: sh -c 'fabric-ca-server start -b admin:adminpw -d'
+    volumes:
+      - /root/blockchain/crypto-config/peerOrganizations/city.safekorea.go.kr/ca:/etc/hyperledger/fabric-ca-server-config
+      - /root/blockchain/crypto-config/peerOrganizations/city.safekorea.go.kr/tlsca:/etc/hyperledger/fabric-ca-server-tls-config
+    # ports:
+    #     - 7054:7054
+
+  ca_gijang-gun_safekorea_go_kr:
+    image: hyperledger/fabric-ca:1.4.4
+    networks:
+      dm:
+        aliases:
+          - ca.gijang-gun.safekorea.go.kr
+    deploy:
+      restart_policy:
+        condition: on-failure
+        delay: 5s
+        # max_attempts: 3  # default : never give up
+        window: 120s
+      placement:
+        constraints: [node.hostname == blc-node02]
+    environment:
+      - FABRIC_CA_HOME=/etc/hyperledger/fabric-ca-server
+      - FABRIC_CA_SERVER_CA_NAME=ca_gijang-gun_safekorea_go_kr
+      - FABRIC_CA_SERVER_CA_CERTFILE=/etc/hyperledger/fabric-ca-server-config/ca.gijang-gun.safekorea.go.kr-cert.pem
+      - FABRIC_CA_SERVER_CA_KEYFILE=/etc/hyperledger/fabric-ca-server-config/70ab5aab0eada0efe44f3f5d4fec0310a6734d5deffbce9488bbace522b167b9_sk
+
+      # TLS
+      - FABRIC_CA_SERVER_TLS_ENABLED=false
+      # - FABRIC_CA_SERVER_TLS_CERTFILE=/etc/hyperledger/fabric-ca-server-tls-config/tlsca.gijang-gun.safekorea.go.kr-cert.pem
+      # - FABRIC_CA_SERVER_TLS_KEYFILE=/etc/hyperledger/fabric-ca-server-tls-config/4016caef4c204b57b1a09d348fb6696c6e7e62600519c2f8e3de3e377e341108_sk
+    command: sh -c 'fabric-ca-server start -b admin:adminpw -d'
+    volumes:
+      - /root/blockchain/crypto-config/peerOrganizations/gijang-gun.safekorea.go.kr/ca:/etc/hyperledger/fabric-ca-server-config
+      - /root/blockchain/crypto-config/peerOrganizations/gijang-gun.safekorea.go.kr/tlsca:/etc/hyperledger/fabric-ca-server-tls-config
+
+  ca_dongnae-gu_safekorea_go_kr:
+    image: hyperledger/fabric-ca:1.4.4
+    networks:
+      dm:
+        aliases:
+          - ca.dongnae-gu.safekorea.go.kr
+    deploy:
+      restart_policy:
+        condition: on-failure
+        delay: 5s
+        # max_attempts: 3  # default : never give up
+        window: 120s
+      placement:
+        constraints: [node.hostname == blc-node03]
+    environment:
+      - FABRIC_CA_HOME=/etc/hyperledger/fabric-ca-server
+      - FABRIC_CA_SERVER_CA_NAME=ca_dongnae-gu_safekorea_go_kr
+      - FABRIC_CA_SERVER_CA_CERTFILE=/etc/hyperledger/fabric-ca-server-config/ca.dongnae-gu.safekorea.go.kr-cert.pem
+      - FABRIC_CA_SERVER_CA_KEYFILE=/etc/hyperledger/fabric-ca-server-config/abfed809d830aa4db106aa5ede517534db84812a0659f5fa2bb026301bc047cd_sk
+      # TLS
+      - FABRIC_CA_SERVER_TLS_ENABLED=false
+      # - FABRIC_CA_SERVER_TLS_CERTFILE=/etc/hyperledger/fabric-ca-server-tls-config/tlsca.dongnae-gu.safekorea.go.kr-cert.pem
+      # - FABRIC_CA_SERVER_TLS_KEYFILE=/etc/hyperledger/fabric-ca-server-tls-config/a81e7b474c32096e29e89d1f58a3becc05727c8c62076778be799601553e052f_sk
+    command: sh -c 'fabric-ca-server start -b admin:adminpw -d'
+    volumes:
+      -  ./crypto-config/peerOrganizations/dongnae-gu.safekorea.go.kr/ca:/etc/hyperledger/fabric-ca-server-config
+      -  ./crypto-config/peerOrganizations/dongnae-gu.safekorea.go.kr/tlsca:/etc/hyperledger/fabric-ca-server-tls-config
+
+  ca_nam-gu_safekorea_go_kr:
+    image: hyperledger/fabric-ca:1.4.4
+    networks:
+      dm:
+        aliases:
+          - ca.nam-gu.safekorea.go.kr
+    deploy:
+      restart_policy:
+        condition: on-failure
+        delay: 5s
+        # max_attempts: 3  # default : never give up
+        window: 120s
+      placement:
+        constraints: [node.hostname == blc-node04]
+    environment:
+      - FABRIC_CA_HOME=/etc/hyperledger/fabric-ca-server
+      - FABRIC_CA_SERVER_CA_NAME=ca_nam-gu_safekorea_go_kr
+      - FABRIC_CA_SERVER_CA_CERTFILE=/etc/hyperledger/fabric-ca-server-config/ca.nam-gu.safekorea.go.kr-cert.pem
+      - FABRIC_CA_SERVER_CA_KEYFILE=/etc/hyperledger/fabric-ca-server-config/26c769ef94c89b28e2e126ed7a95f8cb7cdb816c2d87241057ab81be5634d8e1_sk
+
+      # TLS
+      - FABRIC_CA_SERVER_TLS_ENABLED=false
+      # - FABRIC_CA_SERVER_TLS_CERTFILE=/etc/hyperledger/fabric-ca-server-tls-config/tlsca.nam-gu.safekorea.go.kr-cert.pem
+      # - FABRIC_CA_SERVER_TLS_KEYFILE=/etc/hyperledger/fabric-ca-server-tls-config/6b6ff632c855b815536edaebb716b7926efeea016db347ae4dfacd65eb6c39ad_sk
+    command: sh -c 'fabric-ca-server start -b admin:adminpw -d'
+    volumes:
+      - /root/blockchain/crypto-config/peerOrganizations/nam-gu.safekorea.go.kr/ca:/etc/hyperledger/fabric-ca-server-config
+      - /root/blockchain/crypto-config/peerOrganizations/nam-gu.safekorea.go.kr/tlsca:/etc/hyperledger/fabric-ca-server-tls-config
+
+  ca_dong-gu_safekorea_go_kr:
+    image: hyperledger/fabric-ca:1.4.4
+    networks:
+      dm:
+        aliases:
+          - ca.dong-gu.safekorea.go.kr
+    deploy:
+      restart_policy:
+        condition: on-failure
+        delay: 5s
+        # max_attempts: 3  # default : never give up
+        window: 120s
+      placement:
+        constraints: [node.hostname == blc-node05]
+    environment:
+      - FABRIC_CA_HOME=/etc/hyperledger/fabric-ca-server
+      - FABRIC_CA_SERVER_CA_NAME=ca_dong-gu_safekorea_go_kr
+      - FABRIC_CA_SERVER_CA_CERTFILE=/etc/hyperledger/fabric-ca-server-config/ca.dong-gu.safekorea.go.kr-cert.pem
+      - FABRIC_CA_SERVER_CA_KEYFILE=/etc/hyperledger/fabric-ca-server-config/a88bbb69c165499981176177a0511b184cf69252e6a73869094a2aac6bd237e1_sk
+      # TLS
+      - FABRIC_CA_SERVER_TLS_ENABLED=false
+      # - FABRIC_CA_SERVER_TLS_CERTFILE=/etc/hyperledger/fabric-ca-server-tls-config/tlsca.dong-gu.safekorea.go.kr-cert.pem
+      # - FABRIC_CA_SERVER_TLS_KEYFILE=/etc/hyperledger/fabric-ca-server-tls-config/3e7947bfaa52146f1f19448dc535e0b728ffb8c9cd5b62d9b0ee63cf9e3a692e_sk
+    command: sh -c 'fabric-ca-server start -b admin:adminpw -d'
+    volumes:
+      - /root/blockchain/crypto-config/peerOrganizations/dong-gu.safekorea.go.kr/ca:/etc/hyperledger/fabric-ca-server-config
+      - /root/blockchain/crypto-config/peerOrganizations/dong-gu.safekorea.go.kr/tlsca:/etc/hyperledger/fabric-ca-server-tls-config
+
+  orderer0_safekorea_go_kr:
+    image: hyperledger/fabric-orderer:1.4.4
+    networks:
+      dm:
+        aliases:
+          - orderer0.safekorea.go.kr
+    environment:
+      - FABRIC_CFG_PATH=/etc/hyperledger/fabric
+      - ORDERER_GENERAL_LOCALMSPID=dmOrderer
+      - ORDERER_GENERAL_LISTENADDRESS=0.0.0.0
+      # TLS
+      # - ORDERER_GENERAL_TLS_ENABLED=false
+      # - ORDERER_GENERAL_TLS_PRIVATEKEY=tls/server.key
+      # - ORDERER_GENERAL_TLS_CERTIFICATE=tls/server.crt
+      # - ORDERER_GENERAL_TLS_ROOTCAS=[tls/ca.crt,
+      #                                crypto-config/peerOrganizations/city.safekorea.go.kr/ca/tlsca.city.safekorea.go.kr-cert.pem,
+      #                                crypto-config/peerOrganizations/gijang-gun.safekorea.go.kr/ca/tlsca.gijang-gun.safekorea.go.kr-cert.pem,
+      #                                crypto-config/peerOrganizations/dongnae-gu.safekorea.go.kr/ca/tlsca.dongnae-gu.safekorea.go.kr-cert.pem,
+      #                                crypto-config/peerOrganizations/nam-gu.safekorea.go.kr/ca/tlsca.nam-gu.safekorea.go.kr-cert.pem,
+      #                                crypto-config/peerOrganizations/dong-gu.safekorea.go.kr/ca/tlsca.dong-gu.safekorea.go.kr-cert.pem]
+    working_dir: /etc/hyperledger/fabric
+    volumes:
+      - /root/blockchain/orderer/orderer.yaml:/etc/hyperledger/fabric/orderer.yaml
+      - /root/blockchain/pre-config/configtx.yml:/etc/hyperledger/fabric/configtx.yaml
+      - /root/blockchain/block/mc.block:/etc/hyperledger/fabric/mc.block # block
+      - /root/blockchain/crypto-config:/etc/hyperledger/crypto-config
+      - /root/blockchain/crypto-config/ordererOrganizations/safekorea.go.kr/orderers/orderer0.safekorea.go.kr/msp:/etc/hyperledger/fabric/msp
+      - /root/blockchain/crypto-config/ordererOrganizations/safekorea.go.kr/orderers/orderer0.safekorea.go.kr/tls:/etc/hyperledger/fabric/tls
+      # TLS of ROOTCAs
+      - /root/blockchain/crypto-config/peerOrganizations/city.safekorea.go.kr/tlsca:/etc/hyperledger/fabric/crypto-config/peerOrganizations/city.safekorea.go.kr/ca
+      - /root/blockchain/crypto-config/peerOrganizations/gijang-gun.safekorea.go.kr/tlsca:/etc/hyperledger/fabric/crypto-config/peerOrganizations/gijang-gun.safekorea.go.kr/ca
+      - /root/blockchain/crypto-config/peerOrganizations/dongnae-gu.safekorea.go.kr/tlsca:/etc/hyperledger/fabric/crypto-config/peerOrganizations/dongnae-gu.safekorea.go.kr/ca
+      - /root/blockchain/crypto-config/peerOrganizations/nam-gu.safekorea.go.kr/tlsca:/etc/hyperledger/fabric/crypto-config/peerOrganizations/nam-gu.safekorea.go.kr/ca
+      - /root/blockchain/crypto-config/peerOrganizations/dong-gu.safekorea.go.kr/tlsca:/etc/hyperledger/fabric/crypto-config/peerOrganizations/dong-gu.safekorea.go.kr/ca
+    deploy:
+      replicas: 3
+      restart_policy:
+        condition: on-failure
+        delay: 5s
+        # max_attempts: 3  # default : never give up
+        window: 120s
+      # placement:
+      #   constraints: [node.hostname == blc-node06]
+    depends_on:
+      - kafka0
+      - kafka1
+      - kafka2
+      - kafka3
+    # ports:
+    #   - 7050:7050
+
+  kafka0:
+    image: hyperledger/fabric-kafka:0.4.15
+    networks:
+      dm:
+        aliases:
+          - kafka0
+    environment:
+      - KAFKA_ZOOKEEPER_CONNECT=zk0:2181,zk1:2181,zk2:2181
+      - KAFKA_ADVERTISED_LISTENERS=PLAINTEXT://kafka0:9092
+      - KAFKA_ZOOKEEPER_CONNECTION_TIMEOUT_MS=32000
+      - KAFKA_BROKER_ID=0
+    depends_on:
+      - zk0
+      - zk1
+      - zk2
+    deploy:
+      restart_policy:
+        condition: on-failure
+        delay: 5s
+        # max_attempts: 3  # default : never give up
+        window: 120s
+      placement:
+        constraints: [node.hostname == blc-node06]
+  kafka1:
+    image: hyperledger/fabric-kafka:0.4.15
+    networks:
+      dm:
+        aliases:
+          - kafka1
+    environment:
+      - KAFKA_ZOOKEEPER_CONNECT=zk0:2181,zk1:2181,zk2:2181
+      - KAFKA_ADVERTISED_LISTENERS=PLAINTEXT://kafka1:9092
+      - KAFKA_ZOOKEEPER_CONNECTION_TIMEOUT_MS=16000
+      - KAFKA_BROKER_ID=1
+    depends_on:
+      - zk0
+      - zk1
+      - zk2
+    deploy:
+      restart_policy:
+        condition: on-failure
+        delay: 5s
+        # max_attempts: 3  # default : never give up
+        window: 120s
+      placement:
+        constraints: [node.hostname == blc-node06]
+  kafka2:
+    image: hyperledger/fabric-kafka:0.4.15
+    networks:
+      dm:
+        aliases:
+          - kafka2
+    environment:
+      - KAFKA_ZOOKEEPER_CONNECT=zk0:2181,zk1:2181,zk2:2181
+      - KAFKA_ADVERTISED_LISTENERS=PLAINTEXT://kafka2:9092
+      - KAFKA_ZOOKEEPER_CONNECTION_TIMEOUT_MS=16000
+      - KAFKA_BROKER_ID=2
+    depends_on:
+      - zk0
+      - zk1
+      - zk2
+    deploy:
+      restart_policy:
+        condition: on-failure
+        delay: 5s
+        # max_attempts: 3  # default : never give up
+        window: 120s
+      placement:
+        constraints: [node.hostname == blc-node06]
+  kafka3:
+    image: hyperledger/fabric-kafka:0.4.15
+    networks:
+      dm:
+        aliases:
+          - kafka3
+    environment:
+      - KAFKA_ZOOKEEPER_CONNECT=zk0:2181,zk1:2181,zk2:2181
+      - KAFKA_ADVERTISED_LISTENERS=PLAINTEXT://kafka3:9092
+      - KAFKA_ZOOKEEPER_CONNECTION_TIMEOUT_MS=16000
+      - KAFKA_BROKER_ID=3
+    depends_on:
+      - zk0
+      - zk1
+      - zk2
+    deploy:
+      restart_policy:
+        condition: on-failure
+        delay: 5s
+        # max_attempts: 3  # default : never give up
+        window: 120s
+      placement:
+        constraints: [node.hostname == blc-node06]
+
+  zk0:
+    image: hyperledger/fabric-zookeeper:0.4.15
+    hostname: zk0
+    networks:
+      dm:
+        aliases:
+          - zk0
+    environment:
+      - ZOO_SERVERS=server.1=zk0:2888:3888 server.2=zk1:2888:3888 server.3=zk2:2888:3888
+      - ZOO_MY_ID=1
+    deploy:
+      restart_policy:
+        condition: on-failure
+        delay: 5s
+        # max_attempts: 3  # default : never give up
+        window: 120s
+      placement:
+        constraints: [node.hostname == blc-node06]
+  zk1:
+    image: hyperledger/fabric-zookeeper:0.4.15
+    hostname: zk1
+    networks:
+      dm:
+        aliases:
+          - zk1
+    environment:
+      - ZOO_SERVERS=server.1=zk0:2888:3888 server.2=zk1:2888:3888 server.3=zk2:2888:3888
+      - ZOO_MY_ID=2
+    deploy:
+      restart_policy:
+        condition: on-failure
+        delay: 5s
+        # max_attempts: 3  # default : never give up
+        window: 120s
+      placement:
+        constraints: [node.hostname == blc-node06]
+  zk2:
+    image: hyperledger/fabric-zookeeper:0.4.15
+    hostname: zk2
+    networks:
+      dm:
+        aliases:
+          - zk2
+    environment:
+      - ZOO_SERVERS=server.1=zk0:2888:3888 server.2=zk1:2888:3888 server.3=zk2:2888:3888
+      - ZOO_MY_ID=3
+    deploy:
+      restart_policy:
+        condition: on-failure
+        delay: 5s
+        # max_attempts: 3  # default : never give up
+        window: 120s
+      placement:
+        constraints: [node.hostname == blc-node06]
+
+
+  couchdb_peer0_city_safekorea_go_kr:
+    image: hyperledger/fabric-couchdb:0.4.15
+    networks:
+      dm:
+        aliases:
+          - couchdb.peer0.city.safekorea.go.kr
+    deploy:
+      restart_policy:
+        condition: on-failure
+        delay: 5s
+        # max_attempts: 3  # default : never give up
+        window: 120s
+      placement:
+        constraints: [node.hostname == blc-node01]
+    environment:
+      - COUCHDB_USER=admin
+      - COUCHDB_PASSWORD=password
+    ports:
+        - 7984:5984
+
+  peer0_city_safekorea_go_kr:
+    image: registry.smartm2m.co.kr/kisa-dm/fabric-peer:scc
+    networks:
+      dm:
+        aliases:
+          - peer0.city.safekorea.go.kr
+    deploy:
+      restart_policy:
+        condition: on-failure
+        delay: 5s
+        # max_attempts: 3  # default : never give up
+        window: 120s
+      placement:
+        constraints: [node.hostname == blc-node01]
+    environment:
+      - FABRIC_CFG_PATH=/etc/hyperledger/fabric
+      - CORE_PEER_MSPCONFIGPATH=/etc/hyperledger/fabric/msp
+      - CORE_PEER_LOCALMSPID=city
+      - CORE_PEER_ADDRESS=peer0_city_safekorea_go_kr:7051
+      - CORE_PEER_ID=peer0_city_safekorea_go_kr
+      - CORE_PEER_GOSSIP_EXTERNALENDPOINT=peer0_city_safekorea_go_kr:7051
+      - CORE_PEER_GOSSIP_BOOTSTRAP=peer0_city_safekorea_go_kr:7051
+      - CORE_LEDGER_STATE_COUCHDBCONFIG_COUCHDBADDRESS=couchdb_peer0_city_safekorea_go_kr:5984
+      # TLS - set in core.yaml
+      # - CORE_PEER_TLS_ENABLED=false
+      # - CORE_PEER_TLS_CERT_FILE=tls/server.crt
+      # - CORE_PEER_TLS_KEY_FILE=tls/server.key
+      # - CORE_PEER_TLS_ROOTCERT_FILE=tls/ca.crt
+    working_dir: /etc/hyperledger/fabric
+    volumes:
+      - /root/blockchain/peer/core.yaml:/etc/hyperledger/fabric/core.yaml
+      - /root/blockchain/tx/dm.tx:/etc/hyperledger/fabric/dm.tx # tx
+      - /root/blockchain/block:/etc/hyperledger/fabric/block
+      - /root/blockchain/crypto-config/peerOrganizations/city.safekorea.go.kr/peers/peer0.city.safekorea.go.kr/msp:/etc/hyperledger/fabric/msp
+      - /root/blockchain/crypto-config/peerOrganizations/city.safekorea.go.kr/peers/peer0.city.safekorea.go.kr/tls:/etc/hyperledger/fabric/tls
+      - /var/run/docker.sock:/var/run/docker.sock
+      - /root/blockchain/dm.so:/opt/lib/dm.so
+    # links:
+    #   - couchdb_peer0_city_safekorea_go_kr:couchdb
+    # ports:
+    #   - 7051:7051
+    #   - 7052:7052
+    #   - 7053:7053
+
+  couchdb_peer0_gijang-gun_safekorea_go_kr:
+    image: hyperledger/fabric-couchdb:0.4.15
+    networks:
+      dm:
+        aliases:
+          - couchdb.peer0.gijang-gun.safekorea.go.kr
+    deploy:
+      restart_policy:
+        condition: on-failure
+        delay: 5s
+        # max_attempts: 3  # default : never give up
+        window: 120s
+      placement:
+        constraints: [node.hostname == blc-node02]
+    environment:
+      - COUCHDB_USER=admin
+      - COUCHDB_PASSWORD=password
+    ports:
+      - 8984:5984
+
+  peer0_gijang-gun_safekorea_go_kr:
+    image: registry.smartm2m.co.kr/kisa-dm/fabric-peer:scc
+    networks:
+      dm:
+        aliases:
+          - peer0.gijang-gun.safekorea.go.kr
+    deploy:
+      restart_policy:
+        condition: on-failure
+        delay: 5s
+        # max_attempts: 3  # default : never give up
+        window: 120s
+      placement:
+        constraints: [node.hostname == blc-node02]
+    environment:
+      - FABRIC_CFG_PATH=/etc/hyperledger/fabric
+      - CORE_PEER_MSPCONFIGPATH=/etc/hyperledger/fabric/msp
+      - CORE_PEER_LOCALMSPID=gijang-gun
+      - CORE_PEER_ID=peer0_gijang-gun_safekorea_go_kr
+      - CORE_PEER_GOSSIP_EXTERNALENDPOINT=peer0_gijang-gun_safekorea_go_kr:7051
+      - CORE_PEER_GOSSIP_BOOTSTRAP=peer0_gijang-gun_safekorea_go_kr:7051
+      - CORE_LEDGER_STATE_COUCHDBCONFIG_COUCHDBADDRESS=couchdb_peer0_gijang-gun_safekorea_go_kr:5984
+      # TLS - set in core.yaml
+      # - CORE_PEER_TLS_ENABLED=false
+      # - CORE_PEER_TLS_CERT_FILE=tls/server.crt
+      # - CORE_PEER_TLS_KEY_FILE=tls/server.key
+      # - CORE_PEER_TLS_ROOTCERT_FILE=tls/ca.crt
+    working_dir: /etc/hyperledger/fabric
+    volumes:
+      - /root/blockchain/peer/core.yaml:/etc/hyperledger/fabric/core.yaml
+      - /root/blockchain/tx/dm.tx:/etc/hyperledger/fabric/dm.tx # tx
+      - /root/blockchain/block:/etc/hyperledger/fabric/block
+      - /root/blockchain/crypto-config/peerOrganizations/gijang-gun.safekorea.go.kr/peers/peer0.gijang-gun.safekorea.go.kr/msp:/etc/hyperledger/fabric/msp
+      - /root/blockchain/crypto-config/peerOrganizations/gijang-gun.safekorea.go.kr/peers/peer0.gijang-gun.safekorea.go.kr/tls:/etc/hyperledger/fabric/tls
+      - /var/run/docker.sock:/var/run/docker.sock
+      - /root/blockchain/dm.so:/opt/lib/dm.so
+    # links:
+    #   - couchdb_peer0_gijang-gun_safekorea_go_kr:couchdb
+    # ports:
+    #   - 8051:7051
+    #   - 8052:7052
+    #   - 8053:7053
+
+  couchdb_peer0_dongnae-gu_safekorea_go_kr:
+    image: hyperledger/fabric-couchdb:0.4.15
+    networks:
+      dm:
+        aliases:
+          - couchdb.peer0.dongnae-gu.safekorea.go.kr
+    deploy:
+      restart_policy:
+        condition: on-failure
+        delay: 5s
+        # max_attempts: 3  # default : never give up
+        window: 120s
+      placement:
+        constraints: [node.hostname == blc-node03]
+    environment:
+      - COUCHDB_USER=admin
+      - COUCHDB_PASSWORD=password
+    ports:
+      - 9984:5984
+  peer0_dongnae-gu_safekorea_go_kr:
+    image: registry.smartm2m.co.kr/kisa-dm/fabric-peer:scc
+    networks:
+      dm:
+        aliases:
+          - peer0.dongnae-gu.safekorea.go.kr
+    deploy:
+      restart_policy:
+        condition: on-failure
+        delay: 5s
+        # max_attempts: 3  # default : never give up
+        window: 120s
+      placement:
+        constraints: [node.hostname == blc-node03]
+    environment:
+      - FABRIC_CFG_PATH=/etc/hyperledger/fabric
+      - CORE_PEER_LOCALMSPID=dongnae-gu
+      - CORE_PEER_ID=peer0_dongnae-gu_safekorea_go_kr
+      - CORE_PEER_GOSSIP_EXTERNALENDPOINT=peer0_dongnae-gu_safekorea_go_kr:7051
+      - CORE_PEER_GOSSIP_BOOTSTRAP=peer0_dongnae-gu_safekorea_go_kr:7051
+      - CORE_LEDGER_STATE_COUCHDBCONFIG_COUCHDBADDRESS=couchdb_peer0_dongnae-gu_safekorea_go_kr:5984
+      # TLS - set in core.yaml
+      # - CORE_PEER_TLS_ENABLED=false
+      # - CORE_PEER_TLS_CERT_FILE=tls/server.crt
+      # - CORE_PEER_TLS_KEY_FILE=tls/server.key
+      # - CORE_PEER_TLS_ROOTCERT_FILE=tls/ca.crt
+    working_dir: /etc/hyperledger/fabric
+    volumes:
+      - /root/blockchain/peer/core.yaml:/etc/hyperledger/fabric/core.yaml
+      - /root/blockchain/tx/dm.tx:/etc/hyperledger/fabric/dm.tx # tx
+      - /root/blockchain/block:/etc/hyperledger/fabric/block
+      - /root/blockchain/crypto-config/peerOrganizations/dongnae-gu.safekorea.go.kr/peers/peer0.dongnae-gu.safekorea.go.kr/msp:/etc/hyperledger/fabric/msp
+      - /root/blockchain/crypto-config/peerOrganizations/dongnae-gu.safekorea.go.kr/peers/peer0.dongnae-gu.safekorea.go.kr/tls:/etc/hyperledger/fabric/tls
+      - /var/run/docker.sock:/var/run/docker.sock
+      - /root/blockchain/dm.so:/opt/lib/dm.so
+    # links:
+    #   - couchdb_peer0_dongnae-gu_safekorea_go_kr:couchdb
+    # ports:
+    #   - 9051:7051
+    #   - 9052:7052
+    #   - 9053:7053
+
+  couchdb_peer0_nam-gu_safekorea_go_kr:
+    image: hyperledger/fabric-couchdb:0.4.15
+    networks:
+      dm:
+        aliases:
+          - couchdb.peer0.nam-gu.safekorea.go.kr
+    deploy:
+      restart_policy:
+        condition: on-failure
+        delay: 5s
+        # max_attempts: 3  # default : never give up
+        window: 120s
+      placement:
+        constraints: [node.hostname == blc-node04]
+    environment:
+      - COUCHDB_USER=admin
+      - COUCHDB_PASSWORD=password
+    ports:
+      - 10984:5984
+  peer0_nam-gu_safekorea_go_kr:
+    image: registry.smartm2m.co.kr/kisa-dm/fabric-peer:scc
+    networks:
+      dm:
+        aliases:
+          - peer0.nam-gu.safekorea.go.kr
+    deploy:
+      restart_policy:
+        condition: on-failure
+        delay: 5s
+        # max_attempts: 3  # default : never give up
+        window: 120s
+      placement:
+        constraints: [node.hostname == blc-node04]
+    environment:
+      - FABRIC_CFG_PATH=/etc/hyperledger/fabric
+      - CORE_PEER_MSPCONFIGPATH=/etc/hyperledger/fabric/msp
+      - CORE_PEER_LOCALMSPID=nam-gu
+      - CORE_PEER_ID=peer0_nam-gu_safekorea_go_kr
+      - CORE_PEER_GOSSIP_EXTERNALENDPOINT=peer0_nam-gu_safekorea_go_kr:7051
+      - CORE_PEER_GOSSIP_BOOTSTRAP=peer0_nam-gu_safekorea_go_kr:7051
+      - CORE_LEDGER_STATE_COUCHDBCONFIG_COUCHDBADDRESS=couchdb_peer0_nam-gu_safekorea_go_kr:5984
+      # TLS - set in core.yaml
+      # - CORE_PEER_TLS_ENABLED=false
+      # - CORE_PEER_TLS_CERT_FILE=tls/server.crt
+      # - CORE_PEER_TLS_KEY_FILE=tls/server.key
+      # - CORE_PEER_TLS_ROOTCERT_FILE=tls/ca.crt
+    working_dir: /etc/hyperledger/fabric
+    volumes:
+      - /root/blockchain/peer/core.yaml:/etc/hyperledger/fabric/core.yaml
+      - /root/blockchain/tx/dm.tx:/etc/hyperledger/fabric/dm.tx # tx
+      - /root/blockchain/block:/etc/hyperledger/fabric/block
+      - /root/blockchain/crypto-config/peerOrganizations/nam-gu.safekorea.go.kr/peers/peer0.nam-gu.safekorea.go.kr/msp:/etc/hyperledger/fabric/msp
+      - /root/blockchain/crypto-config/peerOrganizations/nam-gu.safekorea.go.kr/peers/peer0.nam-gu.safekorea.go.kr/tls:/etc/hyperledger/fabric/tls
+      - /var/run/docker.sock:/var/run/docker.sock
+      - /root/blockchain/dm.so:/opt/lib/dm.so
+    # links:
+    #   - couchdb_peer0_nam-gu_safekorea_go_kr:couchdb
+    # ports:
+    #   - 10051:7051
+    #   - 10052:7052
+    #   - 10053:7053
+
+  couchdb_peer0_dong-gu_safekorea_go_kr:
+    image: hyperledger/fabric-couchdb:0.4.15
+    networks:
+      dm:
+        aliases:
+          - couchdb.peer0.dong-gu.safekorea.go.kr
+    deploy:
+      restart_policy:
+        condition: on-failure
+        delay: 5s
+        # max_attempts: 3  # default : never give up
+        window: 120s
+      placement:
+        constraints: [node.hostname == blc-node05]
+    environment:
+      - COUCHDB_USER=admin
+      - COUCHDB_PASSWORD=password
+    ports:
+      - 11984:5984
+  peer0_dong-gu_safekorea_go_kr:
+    image: registry.smartm2m.co.kr/kisa-dm/fabric-peer:scc
+    networks:
+      dm:
+        aliases:
+          - peer0.dong-gu.safekorea.go.kr
+    deploy:
+      restart_policy:
+        condition: on-failure
+        delay: 5s
+        # max_attempts: 3  # default : never give up
+        window: 120s
+      placement:
+        constraints: [node.hostname == blc-node05]
+    environment:
+      - FABRIC_CFG_PATH=/etc/hyperledger/fabric
+      - CORE_PEER_LOCALMSPID=dong-gu
+      - CORE_PEER_ID=peer0_dong-gu_safekorea_go_kr
+      - CORE_PEER_GOSSIP_EXTERNALENDPOINT=peer0_dong-gu_safekorea_go_kr:7051
+      - CORE_PEER_GOSSIP_BOOTSTRAP=peer0_dong-gu_safekorea_go_kr:7051
+      - CORE_LEDGER_STATE_COUCHDBCONFIG_COUCHDBADDRESS=couchdb_peer0_dong-gu_safekorea_go_kr:5984
+      # TLS - set in core.yaml
+      # - CORE_PEER_TLS_ENABLED=false
+      # - CORE_PEER_TLS_CERT_FILE=tls/server.crt
+      # - CORE_PEER_TLS_KEY_FILE=tls/server.key
+      # - CORE_PEER_TLS_ROOTCERT_FILE=tls/ca.crt
+    working_dir: /etc/hyperledger/fabric
+    volumes:
+      - /root/blockchain/peer/core.yaml:/etc/hyperledger/fabric/core.yaml
+      - /root/blockchain/tx/dm.tx:/etc/hyperledger/fabric/dm.tx # tx
+      - /root/blockchain/block:/etc/hyperledger/fabric/block
+      - /root/blockchain/crypto-config/peerOrganizations/dong-gu.safekorea.go.kr/peers/peer0.dong-gu.safekorea.go.kr/msp:/etc/hyperledger/fabric/msp
+      - /root/blockchain/crypto-config/peerOrganizations/dong-gu.safekorea.go.kr/peers/peer0.dong-gu.safekorea.go.kr/tls:/etc/hyperledger/fabric/tls
+      - /var/run/docker.sock:/var/run/docker.sock
+      - /root/blockchain/dm.so:/opt/lib/dm.so
+    # links:
+    #   - couchdb_peer0_dong-gu_safekorea_go_kr:couchdb
+    # ports:
+    #   - 11051:7051
+    #   - 11052:7052
+    #   - 11053:7053
+
+  cli_safekorea_go_kr:
+    image: hyperledger/fabric-tools:1.4.4
+    networks:
+      dm:
+        aliases:
+          - cli.safekorea.go.kr
+    deploy:
+      restart_policy:
+        condition: on-failure
+        delay: 5s
+        # max_attempts: 3  # default : never give up
+        window: 120s
+      placement:
+        constraints: [node.hostname == blc-node01]
+    environment:
+      - FABRIC_CFG_PATH=/etc/hyperledger/fabric
+      - CORE_PEER_MSPCONFIGPATH=/etc/hyperledger/fabric/crypto-config/peerOrganizations/nam-gu.safekorea.go.kr/peers/peer0.nam-gu.safekorea.go.kr/msp
+      - CORE_PEER_LOCALMSPID=city
+      - CORE_PEER_ID=peer0_city_safekorea_go_kr
+      - CORE_PEER_GOSSIP_EXTERNALENDPOINT=peer0_city_safekorea_go_kr:7051
+      - CORE_PEER_GOSSIP_BOOTSTRAP=peer0_city_safekorea_go_kr:7051
+      - CORE_PEER_ADDRESS=0.0.0.0:7051
+      - CORE_PEER_LISTENADDRESS=0.0.0.0:7051
+      - CORE_LEDGER_STATE_STATEDATABASE=goleveldb
+      - CORE_PEER_TLS_ENABLED=false
+      # - CORE_PEER_TLS_CERT_FILE=crypto-config/peerOrganizations/city.safekorea.go.kr/peers/peer0.city.safekorea.go.kr/tls/server.crt
+      # - CORE_PEER_TLS_KEY_FILE=crypto-config/peerOrganizations/city.safekorea.go.kr/peers/peer0.city.safekorea.go.kr/tls/server.key
+      # - CORE_PEER_TLS_ROOTCERT_FILE=crypto-config/peerOrganizations/city.safekorea.go.kr/peers/peer0.city.safekorea.go.kr/tls/ca.crt
+    working_dir: /etc/hyperledger/fabric
+    command: sh -c "peer node start"
+    volumes:
+      - /root/blockchain/peer/core.yaml:/etc/hyperledger/fabric/core.yaml
+      - /root/blockchain/tx:/etc/hyperledger/fabric/tx # tx
+      - /root/blockchain/block:/etc/hyperledger/fabric/block
+      - /root/blockchain/crypto-config:/etc/hyperledger/fabric/crypto-config
+      - /var/run/docker.sock:/var/run/docker.sock
+      - /root/blockchain/gopath:/opt/gopath
+
+  # explorerdb:
+  #   image: hyperledger/explorer-db:0.3.9.5
+  #   restart: always
+  #   container_name: explorerdb
+  #   networks:
+  #     dm:
+  #       aliases:
+  #         - explorerdb
+  #   deploy:
+  #     restart_policy:
+  #       condition: on-failure
+  #       delay: 5s
+  #       # max_attempts: 3  # default : never give up
+  #       window: 120s
+  #     placement:
+  #       constraints: [node.hostname == blc-node01]
+  #   hostname: explorerdb
+  #   environment:
+  #     - DATABASE_DATABASE=fabricexplorer
+  #     - DATABASE_USERNAME=admin
+  #     - DATABASE_PASSWORD=password
+  #   volumes:
+  #   # TDOO:
+  #     - ./explorer/createdb.sh:/docker-entrypoint-initdb.d/createdb.sh
+  #     # - pgdata:/var/lib/postgresql/data
+
+  # explorer:
+  #   image: hyperledger/explorer:0.3.9.5
+  #   container_name: explorer
+  #   restart: always
+  #   networks:
+  #     dm:
+  #       aliases:
+  #         - explorer
+  #   deploy:
+  #     restart_policy:
+  #       condition: on-failure
+  #       delay: 5s
+  #       # max_attempts: 3  # default : never give up
+  #       window: 120s
+  #     placement:
+  #       constraints: [node.hostname == blc-node01]
+  #   hostname: explorer
+  #   depends_on:
+  #     - explorerdb
+  #   environment:
+  #     - DATABASE_HOST=explorerdb
+  #     - DATABASE_USERNAME=admin
+  #     - DATABASE_PASSWORD=password
+  #     - DISCOVERY_AS_LOCALHOST=false
+  #   volumes:
+  #     - ./explorer/config.json:/opt/explorer/app/platform/fabric/config.json
+  #     - ./explorer/connection-profile:/opt/explorer/app/platform/fabric/connection-profile
+  #     - ./crypto-config:/tmp/crypto-config
+  #     # - walletstore:/opt/wallet
+  #   command: sh -c "sleep 16&& node /opt/explorer/main.js && tail -f /dev/null"
+  #   ports:
+  #     - 8090:8080
+
+  api_smartm2m_co_kr:
+    image: registry.smartm2m.co.kr/kisa-dm/api-server:java-2.0
+    container_name: api_smartm2m_co_kr
+    networks:
+      dm:
+        aliases:
+          - api_smartm2m_co_kr
+    deploy:
+      restart_policy:
+        condition: on-failure
+        delay: 5s
+        window: 120s
+      placement:
+        constraints: [node.hostname == blc-node01]
+    ports:
+      - 8989:8080
